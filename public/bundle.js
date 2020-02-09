@@ -170,6 +170,5 @@
     document
         .querySelectorAll('.checkbox')
         .forEach(function (checkbox) { return checkbox.addEventListener('change', onYearsChange); });
-    //# sourceMappingURL=index.js.map
 
 }(d3));

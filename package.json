@@ -4,7 +4,9 @@
   "description": "Data analysis and visualization for the cyclists at the Wiwili bridge in Freiburg.",
   "author": "Nico Gräf <graef.nico@gmail.com>",
   "scripts": {
-    "build": "rollup -wc"
+    "dev": "rollup -wc",
+    "build": "rollup -c",
+    "deploy": "npm run build && gh-pages -d public"
   },
   "keywords": [
     "data",
@@ -21,6 +23,7 @@
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@rollup/plugin-typescript": "^3.0.0",
     "@types/d3": "^5.7.2",
+    "gh-pages": "^2.2.0",
     "rollup": "^1.31.0",
     "tslib": "^1.10.0",
     "typescript": "^3.7.5"
