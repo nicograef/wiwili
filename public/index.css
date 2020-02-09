@@ -1,0 +1,53 @@
+html,
+body,
+g,
+svg {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+}
+
+header {
+  /* width: 100%; */
+  padding: 25px;
+}
+
+.checkbox {
+  background: #ddd;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+path {
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
+
+path.mean {
+  stroke-width: 4;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.legend {
+  font-size: 2rem;
+  font-weight: bold;
+  text-anchor: middle;
+}
+
+rect {
+  opacity: 0.9;
+}
+
+rect:hover {
+  fill: yellow;
+  opacity: 1;
+}
