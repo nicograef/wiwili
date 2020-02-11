@@ -7,7 +7,7 @@ type countData = {
   count: number
 }
 
-export const LineGraph = (data: countData[]) => {
+export const BarChart = (data: countData[]) => {
   // set the dimensions and margins of the graph
   const margin = 50
 
@@ -20,6 +20,15 @@ export const LineGraph = (data: countData[]) => {
   const height = document.getElementsByTagName('svg')[0].clientHeight - 2 * margin
 
   // set the ranges
+
+  // The scale spacing the groups:
+  // const xDates = d3
+  //   .scaleTime()
+  //   .range([0, width])
+  //   .domain(d3.extent(data, d => d.date))
+
+  // const xYears = d3.scaleBand().padding(0.05)
+
   const x = d3
     .scaleTime()
     .range([0, width])
@@ -27,35 +36,36 @@ export const LineGraph = (data: countData[]) => {
 
   const y = d3
     .scaleLinear()
-    .rangeRound([height, 0])
+    .range([height, 0])
     .domain([0, 18000])
   // .domain([0, d3.max(data, d => d.count)])
 
-  const countLine = d3
-    .line<countData>()
-    .x(d => x(d.date))
-    .y(d => y(d.count))
-  // .curve(d3.curveCatmullRom)
-
-  const countLines = d3
+  const countsPerYear = d3
     .nest<countData>()
     .key(d => d.year)
     .entries(data)
 
-  const legendSpace = width / countLines.length // spacing for the legend
+  const legendSpace = width / countsPerYear.length
 
-  countLines.forEach((d, i) => {
+  countsPerYear.forEach((d, i) => {
+    const barWidth = width / 365 / countsPerYear.length
+    const xOffset = barWidth * i
+
     // compute mean and title
     const counts = d.values.map((v: countData) => v.count)
     const mean = Math.floor(d3.mean(counts) / 100) * 100
     const title = d.key + ', ' + mean + '/Tag'
 
-    // add the line
     svg
-      .append('path')
-      .attr('class', 'line')
-      .style('stroke', colors[d.key])
-      .attr('d', countLine(d.values))
+      .selectAll<SVGGElement, countData>('.bar')
+      .data<countData>(d.values)
+      .enter()
+      .append('rect')
+      .attr('fill', colors[d.key])
+      .attr('x', d => x(d.date) + xOffset)
+      .attr('width', barWidth)
+      .attr('y', d => y(d.count))
+      .attr('height', d => height - y(d.count))
 
     // add title
     svg
