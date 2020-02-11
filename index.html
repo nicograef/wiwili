@@ -9,11 +9,17 @@
   <body>
     <header>
       <h1>Fahrradverkehr auf der Wiwilibrücke</h1>
-      <div>
-        <label for="chart-type">Darstellung: </label>
+      <div id="chart-options">
+        <label for="chart-type">Diagramm: </label>
         <select id="chart-type">
           <option value="line-chart">Linien</option>
-          <option value="bar-chart" selected>Striche</option>
+          <option value="bar-chart" selected>Balken</option>
+        </select>
+        &nbsp;
+        <label for="chart-mode">Darstellung: </label>
+        <select id="chart-mode">
+          <option value="comparison" selected>Vergleich</option>
+          <option value="history">Verlauf</option>
         </select>
       </div>
       <div id="years">
@@ -76,8 +82,13 @@
         </span>
         &nbsp;
         <span class="checkbox">
-          <label for="1-monat">Monat</label>
+          <label for="1-monat">1 Monat</label>
           <input type="checkbox" name="1-monat" value="1-monat" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="3-monate">3 Monate</label>
+          <input type="checkbox" name="3-monate" value="3-monate" />
         </span>
       </div>
     </header>

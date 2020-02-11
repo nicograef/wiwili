@@ -30,23 +30,28 @@ header h1 {
 }
 
 #years,
-#smoothing {
+#smoothing,
+#chart-options {
   padding: 5px 0;
   /* margin: 10px 0; */
   line-height: 2;
 }
 
 .checkbox {
-  /* background: #ddd; */
+  background: #888;
   color: white;
   padding: 5px;
   border-radius: 5px;
   white-space: nowrap;
 }
 
+.checkbox input {
+  vertical-align: text-top;
+}
+
 path {
   stroke: black;
-  stroke-width: 2;
+  stroke-width: 4;
   fill: none;
 }
 
