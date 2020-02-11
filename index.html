@@ -9,6 +9,13 @@
   <body>
     <header>
       <h1>Fahrradverkehr auf der Wiwilibrücke</h1>
+      <div>
+        <label for="chart-type">Darstellung: </label>
+        <select id="chart-type">
+          <option value="line-chart">Linien</option>
+          <option value="bar-chart" selected>Striche</option>
+        </select>
+      </div>
       <div id="years">
         <span>Jahre auswählen: &nbsp; </span>
         <span class="checkbox">
@@ -38,7 +45,7 @@
         &nbsp;
         <span class="checkbox">
           <label for="2017">2017</label>
-          <input type="checkbox" name="2017" value="2017" />
+          <input type="checkbox" name="2017" value="2017" checked />
         </span>
         &nbsp;
         <span class="checkbox">
@@ -65,7 +72,7 @@
         &nbsp;
         <span class="checkbox">
           <label for="10-tage">10 Tage</label>
-          <input type="checkbox" name="10-tage" value="10-tage" />
+          <input type="checkbox" name="10-tage" value="10-tage" checked />
         </span>
         &nbsp;
         <span class="checkbox">
@@ -75,7 +82,7 @@
       </div>
     </header>
 
-    <div id="graphs"></div>
+    <svg></svg>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="bundle.js"></script>
