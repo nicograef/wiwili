@@ -9,51 +9,70 @@
   <body>
     <header>
       <h1>Fahrradverkehr auf der Wiwilibrücke</h1>
-      <span>Jahre auswählen: &nbsp; </span>
-      <span class="checkbox">
-        <label for="2012">2012</label>
-        <input type="checkbox" name="2012" value="2012" />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2013">2013</label>
-        <input type="checkbox" name="2013" value="2013" checked />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2014">2014</label>
-        <input type="checkbox" name="2014" value="2014" />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2015">2015</label>
-        <input type="checkbox" name="2015" value="2015" />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2016">2016</label>
-        <input type="checkbox" name="2016" value="2016" />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2017">2017</label>
-        <input type="checkbox" name="2017" value="2017" />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2018">2018</label>
-        <input type="checkbox" name="2018" value="2018" checked />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2019">2019</label>
-        <input type="checkbox" name="2019" value="2019" />
-      </span>
-      &nbsp;
-      <span class="checkbox">
-        <label for="2020">2020</label>
-        <input type="checkbox" name="2020" value="2020" />
-      </span>
+      <div id="years">
+        <span>Jahre auswählen: &nbsp; </span>
+        <span class="checkbox">
+          <label for="2012">2012</label>
+          <input type="checkbox" name="2012" value="2012" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2013">2013</label>
+          <input type="checkbox" name="2013" value="2013" checked />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2014">2014</label>
+          <input type="checkbox" name="2014" value="2014" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2015">2015</label>
+          <input type="checkbox" name="2015" value="2015" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2016">2016</label>
+          <input type="checkbox" name="2016" value="2016" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2017">2017</label>
+          <input type="checkbox" name="2017" value="2017" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2018">2018</label>
+          <input type="checkbox" name="2018" value="2018" checked />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2019">2019</label>
+          <input type="checkbox" name="2019" value="2019" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="2020">2020</label>
+          <input type="checkbox" name="2020" value="2020" />
+        </span>
+      </div>
+      <div id="smoothing">
+        <span>Durchschnitt (Glättung): &nbsp; </span>
+        <span class="checkbox">
+          <label for="3-tage">3 Tage</label>
+          <input type="checkbox" name="3-tage" value="3-tage" checked />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="10-tage">10 Tage</label>
+          <input type="checkbox" name="10-tage" value="10-tage" />
+        </span>
+        &nbsp;
+        <span class="checkbox">
+          <label for="1-monat">Monat</label>
+          <input type="checkbox" name="1-monat" value="1-monat" />
+        </span>
+      </div>
     </header>
 
     <div id="graphs"></div>

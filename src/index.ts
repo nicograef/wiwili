@@ -14,7 +14,8 @@ import { LineGraph } from './linegraph'
 // LineGraphFull()
 
 let selectedYears = ['2013', '2018']
-LineGraph(selectedYears)
+let selectedSmoothing = ['3-tage']
+LineGraph(selectedYears, selectedSmoothing)
 
 const onYearsChange = (e: Event) => {
   const changedYear = e.target as HTMLInputElement
@@ -23,9 +24,24 @@ const onYearsChange = (e: Event) => {
 
   document.querySelector('#graphs').innerHTML = ''
 
-  LineGraph(selectedYears)
+  LineGraph(selectedYears, selectedSmoothing)
+}
+
+const onSmoothingChange = (e: Event) => {
+  const changedSmoothing = e.target as HTMLInputElement
+  if (changedSmoothing.checked) selectedSmoothing.push(changedSmoothing.value)
+  else
+    selectedSmoothing = selectedSmoothing.filter(smoothing => smoothing !== changedSmoothing.value)
+
+  document.querySelector('#graphs').innerHTML = ''
+
+  LineGraph(selectedYears, selectedSmoothing)
 }
 
 document
-  .querySelectorAll('.checkbox')
+  .querySelectorAll('#years .checkbox')
   .forEach(checkbox => checkbox.addEventListener('change', onYearsChange))
+
+document
+  .querySelectorAll('#smoothing .checkbox')
+  .forEach(checkbox => checkbox.addEventListener('change', onSmoothingChange))

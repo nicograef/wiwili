@@ -6,7 +6,7 @@ type countData = {
   count: number
 }
 
-export const LineGraph = async (years: string[]) => {
+export const LineGraph = async (years: string[], smoothing: string[]) => {
   // set the dimensions and margins of the graph
   const margin = 100
   const width = window.innerWidth - 2 * margin
@@ -19,7 +19,7 @@ export const LineGraph = async (years: string[]) => {
     .select('#graphs')
     .append('svg')
     .attr('width', width + 1.9 * margin)
-    .attr('height', height + 1.9 * margin)
+    .attr('height', height + 1.5 * margin)
     .append('g')
     .attr('transform', 'translate(' + margin + ',' + margin + ')')
 
@@ -49,7 +49,7 @@ export const LineGraph = async (years: string[]) => {
     .line<countData>()
     .x(d => x(d.date))
     .y(d => y(d.count))
-    .curve(d3.curveCatmullRom)
+  // .curve(d3.curveCatmullRom)
 
   const countLines = d3
     .nest<countData>()
@@ -61,9 +61,9 @@ export const LineGraph = async (years: string[]) => {
   const legendSpace = width / countLines.length // spacing for the legend
 
   countLines.forEach((d, i) => {
-    smooth(d.values, 2)
-    smooth(d.values, 5)
-    smooth(d.values, 15)
+    if (smoothing.includes('3-tage')) smooth(d.values, 2)
+    if (smoothing.includes('10-tage')) smooth(d.values, 5)
+    if (smoothing.includes('1-monat')) smooth(d.values, 15)
 
     // compute mean and title
     const counts = d.values.map((v: countData) => v.count)
