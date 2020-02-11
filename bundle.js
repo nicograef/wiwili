@@ -53,7 +53,7 @@
         }
     }
 
-    var LineGraph = function (years) { return __awaiter(void 0, void 0, void 0, function () {
+    var LineGraph = function (years, smoothing) { return __awaiter(void 0, void 0, void 0, function () {
         var margin, width, height, svg, parseTime, fullData, rawData, data, x, y, countLine, countLines, color, legendSpace;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -64,7 +64,7 @@
                     svg = d3.select('#graphs')
                         .append('svg')
                         .attr('width', width + 1.9 * margin)
-                        .attr('height', height + 1.9 * margin)
+                        .attr('height', height + 1.5 * margin)
                         .append('g')
                         .attr('transform', 'translate(' + margin + ',' + margin + ')');
                     parseTime = d3.timeParse('%m-%d');
@@ -85,8 +85,7 @@
                         .domain([0, d3.max(data, function (d) { return d.count; })]);
                     countLine = d3.line()
                         .x(function (d) { return x(d.date); })
-                        .y(function (d) { return y(d.count); })
-                        .curve(d3.curveCatmullRom);
+                        .y(function (d) { return y(d.count); });
                     countLines = d3.nest()
                         .key(function (d) { return d.year; })
                         .entries(data);
@@ -94,9 +93,12 @@
                     legendSpace = width / countLines.length // spacing for the legend
                     ;
                     countLines.forEach(function (d, i) {
-                        smooth(d.values, 2);
-                        smooth(d.values, 5);
-                        smooth(d.values, 15);
+                        if (smoothing.includes('3-tage'))
+                            smooth(d.values, 2);
+                        if (smoothing.includes('10-tage'))
+                            smooth(d.values, 5);
+                        if (smoothing.includes('1-monat'))
+                            smooth(d.values, 15);
                         // compute mean and title
                         var counts = d.values.map(function (v) { return v.count; });
                         var mean = Math.floor(d3.mean(counts) / 100) * 100;
@@ -157,7 +159,8 @@
     // LineGraph(['2013', '2016', '2019'])
     // LineGraphFull()
     var selectedYears = ['2013', '2018'];
-    LineGraph(selectedYears);
+    var selectedSmoothing = ['3-tage'];
+    LineGraph(selectedYears, selectedSmoothing);
     var onYearsChange = function (e) {
         var changedYear = e.target;
         if (changedYear.checked)
@@ -165,10 +168,22 @@
         else
             selectedYears = selectedYears.filter(function (year) { return year !== changedYear.value; });
         document.querySelector('#graphs').innerHTML = '';
-        LineGraph(selectedYears);
+        LineGraph(selectedYears, selectedSmoothing);
+    };
+    var onSmoothingChange = function (e) {
+        var changedSmoothing = e.target;
+        if (changedSmoothing.checked)
+            selectedSmoothing.push(changedSmoothing.value);
+        else
+            selectedSmoothing = selectedSmoothing.filter(function (smoothing) { return smoothing !== changedSmoothing.value; });
+        document.querySelector('#graphs').innerHTML = '';
+        LineGraph(selectedYears, selectedSmoothing);
     };
     document
-        .querySelectorAll('.checkbox')
+        .querySelectorAll('#years .checkbox')
         .forEach(function (checkbox) { return checkbox.addEventListener('change', onYearsChange); });
+    document
+        .querySelectorAll('#smoothing .checkbox')
+        .forEach(function (checkbox) { return checkbox.addEventListener('change', onSmoothingChange); });
 
 }(d3));

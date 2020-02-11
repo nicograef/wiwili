@@ -13,10 +13,18 @@ header {
   padding: 25px;
 }
 
+#years,
+#smoothing {
+  padding: 10px 0;
+  /* margin: 10px 0; */
+  line-height: 2;
+}
+
 .checkbox {
   background: #ddd;
   padding: 5px;
   border-radius: 5px;
+  white-space: nowrap;
 }
 
 path {
