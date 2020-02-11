@@ -11,34 +11,39 @@ type countData = {
 }
 
 const parseTime = d3.timeParse('%m-%d')
+const parseTimeWithYear = d3.timeParse('%Y-%m-%d')
 
 d3.csv('data/counts-by-year.csv').then(rawData => {
   let selectedYears = ['2013', '2017', '2018']
   let selectedSmoothing = ['3-tage', '10-tage']
   let selectedChartType = 'bar-chart'
-
-  const fullData: countData[] = rawData.map(d => ({
-    year: d.year,
-    date: parseTime(d.date),
-    count: Number(d.count)
-  }))
+  let selectedChartMode = 'comparison'
 
   const updateGraph = () => {
+    // Create new copy every time so we don't mess with the original data set
+    const currentCopy: countData[] = rawData.map(d => ({
+      year: d.year,
+      date:
+        selectedChartMode === 'comparison'
+          ? parseTime(d.date)
+          : parseTimeWithYear(d.year + '-' + d.date),
+      count: Number(d.count)
+    }))
+
+    // smooth over the whole dataset so filtering does not affect smoothing.
+    // problem: when year 2013 and year 2017 selected: smooth algorithm will calculat december 2013 into january 2017
+    if (selectedSmoothing.includes('3-tage')) smooth(currentCopy, 2)
+    if (selectedSmoothing.includes('10-tage')) smooth(currentCopy, 5)
+    if (selectedSmoothing.includes('1-monat')) smooth(currentCopy, 15)
+    if (selectedSmoothing.includes('3-monate')) smooth(currentCopy, 45)
+
     // Filter by years
-    const filteredData: countData[] = fullData
-      .filter(d => selectedYears.includes(d.year))
-      .map(d => ({
-        year: d.year,
-        date: d.date,
-        count: d.count
-      }))
+    const filteredData = currentCopy.filter(d => selectedYears.includes(d.year))
 
-    if (selectedSmoothing.includes('3-tage')) smooth(filteredData, 2)
-    if (selectedSmoothing.includes('10-tage')) smooth(filteredData, 5)
-    if (selectedSmoothing.includes('1-monat')) smooth(filteredData, 15)
-
+    // Clear graph area
     document.querySelector('svg').innerHTML = ''
 
+    // render selected chart
     if (selectedChartType === 'line-chart') LineGraph(filteredData)
     else if (selectedChartType === 'bar-chart') BarChart(filteredData)
   }
@@ -66,6 +71,12 @@ d3.csv('data/counts-by-year.csv').then(rawData => {
     updateGraph()
   }
 
+  const onChartModeChange = (e: Event) => {
+    const clickedChartMode = e.target as HTMLInputElement
+    selectedChartMode = clickedChartMode.value
+    updateGraph()
+  }
+
   document.querySelectorAll('#years .checkbox').forEach((checkbox: HTMLSpanElement) => {
     const year = (checkbox.children[1] as HTMLInputElement).value
     checkbox.style.background = colors[year]
@@ -77,6 +88,7 @@ d3.csv('data/counts-by-year.csv').then(rawData => {
     .forEach(checkbox => checkbox.addEventListener('change', onSmoothingChange))
 
   document.querySelector('#chart-type').addEventListener('change', onChartTypeChange)
+  document.querySelector('#chart-mode').addEventListener('change', onChartModeChange)
 
   updateGraph()
 })

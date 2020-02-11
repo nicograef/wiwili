@@ -15,12 +15,12 @@
 
   var LineGraph = function (data) {
       // set the dimensions and margins of the graph
-      var margin = 50;
+      var axisOffset = 50;
       var svg = d3.select('svg')
           .append('g')
-          .attr('transform', 'translate(' + margin + ', ' + margin + ')');
-      var width = document.getElementsByTagName('svg')[0].clientWidth - 2 * margin;
-      var height = document.getElementsByTagName('svg')[0].clientHeight - 2 * margin;
+          .attr('transform', 'translate(' + axisOffset + ', ' + axisOffset + ')');
+      var width = document.getElementsByTagName('svg')[0].clientWidth - 2 * axisOffset;
+      var height = document.getElementsByTagName('svg')[0].clientHeight - 2 * axisOffset;
       // set the ranges
       var x = d3.scaleTime()
           .range([0, width])
@@ -69,23 +69,15 @@
           .attr('class', 'axis')
           .call(d3.axisLeft(y));
   };
-  //# sourceMappingURL=linegraph.js.map
 
   var BarChart = function (data) {
       // set the dimensions and margins of the graph
-      var margin = 50;
+      var axisOffset = 50;
       var svg = d3.select('svg')
           .append('g')
-          .attr('transform', 'translate(' + margin + ', ' + margin + ')');
-      var width = document.getElementsByTagName('svg')[0].clientWidth - 2 * margin;
-      var height = document.getElementsByTagName('svg')[0].clientHeight - 2 * margin;
-      // set the ranges
-      // The scale spacing the groups:
-      // const xDates = d3
-      //   .scaleTime()
-      //   .range([0, width])
-      //   .domain(d3.extent(data, d => d.date))
-      // const xYears = d3.scaleBand().padding(0.05)
+          .attr('transform', 'translate(' + axisOffset + ', ' + axisOffset + ')');
+      var width = document.getElementsByTagName('svg')[0].clientWidth - 2 * axisOffset;
+      var height = document.getElementsByTagName('svg')[0].clientHeight - 2 * axisOffset;
       var x = d3.scaleTime()
           .range([0, width])
           .domain(d3.extent(data, function (d) { return d.date; }));
@@ -135,34 +127,38 @@
           .attr('class', 'axis')
           .call(d3.axisLeft(y));
   };
-  //# sourceMappingURL=barchart.js.map
 
   var parseTime = d3.timeParse('%m-%d');
+  var parseTimeWithYear = d3.timeParse('%Y-%m-%d');
   d3.csv('data/counts-by-year.csv').then(function (rawData) {
       var selectedYears = ['2013', '2017', '2018'];
       var selectedSmoothing = ['3-tage', '10-tage'];
       var selectedChartType = 'bar-chart';
-      var fullData = rawData.map(function (d) { return ({
-          year: d.year,
-          date: parseTime(d.date),
-          count: Number(d.count)
-      }); });
+      var selectedChartMode = 'comparison';
       var updateGraph = function () {
-          // Filter by years
-          var filteredData = fullData
-              .filter(function (d) { return selectedYears.includes(d.year); })
-              .map(function (d) { return ({
+          // Create new copy every time so we don't mess with the original data set
+          var currentCopy = rawData.map(function (d) { return ({
               year: d.year,
-              date: d.date,
-              count: d.count
+              date: selectedChartMode === 'comparison'
+                  ? parseTime(d.date)
+                  : parseTimeWithYear(d.year + '-' + d.date),
+              count: Number(d.count)
           }); });
+          // smooth over the whole dataset so filtering does not affect smoothing.
+          // problem: when year 2013 and year 2017 selected: smooth algorithm will calculat december 2013 into january 2017
           if (selectedSmoothing.includes('3-tage'))
-              smooth(filteredData, 2);
+              smooth(currentCopy, 2);
           if (selectedSmoothing.includes('10-tage'))
-              smooth(filteredData, 5);
+              smooth(currentCopy, 5);
           if (selectedSmoothing.includes('1-monat'))
-              smooth(filteredData, 15);
+              smooth(currentCopy, 15);
+          if (selectedSmoothing.includes('3-monate'))
+              smooth(currentCopy, 45);
+          // Filter by years
+          var filteredData = currentCopy.filter(function (d) { return selectedYears.includes(d.year); });
+          // Clear graph area
           document.querySelector('svg').innerHTML = '';
+          // render selected chart
           if (selectedChartType === 'line-chart')
               LineGraph(filteredData);
           else if (selectedChartType === 'bar-chart')
@@ -189,6 +185,11 @@
           selectedChartType = clickedChartType.value;
           updateGraph();
       };
+      var onChartModeChange = function (e) {
+          var clickedChartMode = e.target;
+          selectedChartMode = clickedChartMode.value;
+          updateGraph();
+      };
       document.querySelectorAll('#years .checkbox').forEach(function (checkbox) {
           var year = checkbox.children[1].value;
           checkbox.style.background = colors[year];
@@ -198,6 +199,7 @@
           .querySelectorAll('#smoothing .checkbox')
           .forEach(function (checkbox) { return checkbox.addEventListener('change', onSmoothingChange); });
       document.querySelector('#chart-type').addEventListener('change', onChartTypeChange);
+      document.querySelector('#chart-mode').addEventListener('change', onChartModeChange);
       updateGraph();
   });
   var smooth = function (data, avgWidth) {
@@ -213,6 +215,5 @@
           d.count = localAverage;
       });
   };
-  //# sourceMappingURL=index.js.map
 
 }(d3));

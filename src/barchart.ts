@@ -9,25 +9,15 @@ type countData = {
 
 export const BarChart = (data: countData[]) => {
   // set the dimensions and margins of the graph
-  const margin = 50
+  const axisOffset = 50
 
   const svg = d3
     .select('svg')
     .append('g')
-    .attr('transform', 'translate(' + margin + ', ' + margin + ')')
+    .attr('transform', 'translate(' + axisOffset + ', ' + axisOffset + ')')
 
-  const width = document.getElementsByTagName('svg')[0].clientWidth - 2 * margin
-  const height = document.getElementsByTagName('svg')[0].clientHeight - 2 * margin
-
-  // set the ranges
-
-  // The scale spacing the groups:
-  // const xDates = d3
-  //   .scaleTime()
-  //   .range([0, width])
-  //   .domain(d3.extent(data, d => d.date))
-
-  // const xYears = d3.scaleBand().padding(0.05)
+  const width = document.getElementsByTagName('svg')[0].clientWidth - 2 * axisOffset
+  const height = document.getElementsByTagName('svg')[0].clientHeight - 2 * axisOffset
 
   const x = d3
     .scaleTime()
