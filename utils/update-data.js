@@ -1,32 +1,29 @@
 const fs = require('fs')
 const path = require('path')
-const http = require('http')
+const axios = require('axios').default
 
-const fetchData = () => {
-  const today = new Date()
-  const todayCode = `${today.getFullYear()}0${today.getMonth() + 1}${today.getDate()}`
+/**
+ * Example: 'https://www.eco-visio.net/api/aladdin/1.0.0/pbl/publicwebpage/data/100004595?begin=20200101&end=20201218&step=4&domain=751&withNull=true&t=1dc232c11d5617076e9ae7add6e6140128067d38b986e7c9c9da41bb95c41a5b'
+ */
+function getDataUrl() {
+  const baseUrl = 'https://www.eco-visio.net/api/aladdin/1.0.0/pbl/publicwebpage/data/100004595?'
+  const hardParams =
+    '&step=4&domain=751&withNull=true&t=1dc232c11d5617076e9ae7add6e6140128067d38b986e7c9c9da41bb95c41a5b'
+
+  const now = new Date()
+  const today = now.toISOString().split('T')[0].replace(/-/g, '')
+  const timeRangeParams = `begin=20120501&end=${today}`
+
+  return baseUrl + timeRangeParams + hardParams
+}
+
+async function fetchData() {
+  const dataUrl = getDataUrl()
+  console.log(dataUrl)
 
   console.log('fetching new data ...')
 
-  return new Promise((resolve, reject) => {
-    const dataUrl = `http://www.eco-public.com/api/cw6Xk4jW4X4R/data/periode/100004595?begin=20120501&end=${todayCode}&step=4`
-
-    http.get(dataUrl, (res) => {
-      res.on('error', (error) => reject(error))
-
-      res.setEncoding('utf8')
-
-      let body = ''
-      res.on('data', (data) => {
-        body += data
-      })
-
-      res.on('end', () => {
-        body = JSON.parse(body)
-        resolve(body)
-      })
-    })
-  })
+  return axios.get(dataUrl).then((res) => res.data)
 }
 
 fetchData().then((data) => {
