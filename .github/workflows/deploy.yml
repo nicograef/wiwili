@@ -1,3 +1,6 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
 name: GH Pages Deploy
 
 on:
@@ -15,7 +18,7 @@ jobs:
       run: |
         git config --global user.name "nicograef"
         git config --global user.email "graef.nico@gmail.com"
-        git remote set-url origin https://nicograef:${{ secrets.GITHUB_TOKEN }}@github.com/${{ secrets.GITHUB_REPOSITORY }}.git
+        git remote set-url origin https://nicograef:${{ secrets.GITHUB_TOKEN }}@github.com/nicograef/wiwili.git
         npm install
         npm run deploy
         
