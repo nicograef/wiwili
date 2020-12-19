@@ -18,11 +18,8 @@ function getDataUrl() {
 }
 
 async function fetchData() {
-  const dataUrl = getDataUrl()
-  console.log(dataUrl)
-
   console.log('fetching new data ...')
-
+  const dataUrl = getDataUrl()
   return axios.get(dataUrl).then((res) => res.data)
 }
 

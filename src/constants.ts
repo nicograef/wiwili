@@ -7,5 +7,6 @@ export const colors = {
   2017: 'green',
   2018: 'blue',
   2019: 'darkred',
-  2020: 'brown'
+  2020: 'brown',
+  2021: 'darkyellow'
 }

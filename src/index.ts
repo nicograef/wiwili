@@ -14,7 +14,7 @@ const parseTime = d3.timeParse('%m-%d')
 const parseTimeWithYear = d3.timeParse('%Y-%m-%d')
 
 d3.csv('data/counts-by-year.csv').then(rawData => {
-  let selectedYears = ['2013', '2017', '2018']
+  let selectedYears = ['2013', '2018', '2020']
   let selectedSmoothing = ['3-tage', '10-tage']
   let selectedChartType = 'bar-chart'
   let selectedChartMode = 'comparison'
