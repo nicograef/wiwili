@@ -7,7 +7,7 @@ type countData = {
   count: number
 }
 
-export const BarChart = (data: countData[]) => {
+export function BarChart(data: countData[]) {
   // set the dimensions and margins of the graph
   const axisOffset = 50
 

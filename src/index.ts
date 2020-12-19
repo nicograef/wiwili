@@ -4,7 +4,7 @@ import { LineGraph } from './linegraph'
 import { BarChart } from './barchart'
 import { colors } from './constants'
 
-type countData = {
+type ICountData = {
   year: string
   date: Date
   count: number
@@ -19,9 +19,9 @@ d3.csv('data/counts-by-year.csv').then(rawData => {
   let selectedChartType = 'bar-chart'
   let selectedChartMode = 'comparison'
 
-  const updateGraph = () => {
+  function updateGraph() {
     // Create new copy every time so we don't mess with the original data set
-    const currentCopy: countData[] = rawData.map(d => ({
+    const currentCopy: ICountData[] = rawData.map(d => ({
       year: d.year,
       date:
         selectedChartMode === 'comparison'
@@ -48,14 +48,14 @@ d3.csv('data/counts-by-year.csv').then(rawData => {
     else if (selectedChartType === 'bar-chart') BarChart(filteredData)
   }
 
-  const onYearsChange = (e: Event) => {
+  function onYearsChange(e: Event) {
     const changedYear = e.target as HTMLInputElement
     if (changedYear.checked) selectedYears.push(changedYear.value)
     else selectedYears = selectedYears.filter(year => year !== changedYear.value)
     updateGraph()
   }
 
-  const onSmoothingChange = (e: Event) => {
+  function onSmoothingChange(e: Event) {
     const changedSmoothing = e.target as HTMLInputElement
     if (changedSmoothing.checked) selectedSmoothing.push(changedSmoothing.value)
     else
@@ -65,13 +65,13 @@ d3.csv('data/counts-by-year.csv').then(rawData => {
     updateGraph()
   }
 
-  const onChartTypeChange = (e: Event) => {
+  function onChartTypeChange(e: Event) {
     const clickedChartType = e.target as HTMLInputElement
     selectedChartType = clickedChartType.value
     updateGraph()
   }
 
-  const onChartModeChange = (e: Event) => {
+  function onChartModeChange(e: Event) {
     const clickedChartMode = e.target as HTMLInputElement
     selectedChartMode = clickedChartMode.value
     updateGraph()
@@ -93,7 +93,7 @@ d3.csv('data/counts-by-year.csv').then(rawData => {
   updateGraph()
 })
 
-const smooth = (data, avgWidth) => {
+function smooth(data: ICountData[], avgWidth: number) {
   // smoothing with forward moving average
   data.forEach((d, i) => {
     let localAvgWidth = avgWidth

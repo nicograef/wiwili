@@ -4,7 +4,8 @@
   "description": "Data visualization for the cyclists at the Wiwili bridge in Freiburg.",
   "author": "Nico Gräf <graef.nico@gmail.com>",
   "scripts": {
-    "dev": "rollup -wc & serve public",
+    "dev": "rollup -c && serve public",
+    "dev:watch": "rollup -wc & serve public",
     "build": "npm run update && rollup -c",
     "serve": "serve public",
     "deploy": "npm run build && gh-pages -d public",

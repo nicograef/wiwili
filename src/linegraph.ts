@@ -7,7 +7,7 @@ type countData = {
   count: number
 }
 
-export const LineGraph = (data: countData[]) => {
+export function LineGraph(data: countData[]) {
   // set the dimensions and margins of the graph
   const axisOffset = 50
 
