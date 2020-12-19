@@ -14,7 +14,7 @@
         2021: 'darkturquoise'
     };
 
-    var LineGraph = function (data) {
+    function LineGraph(data) {
         // set the dimensions and margins of the graph
         var axisOffset = 50;
         var svg = d3.select('svg')
@@ -69,9 +69,9 @@
             .append('g')
             .attr('class', 'axis')
             .call(d3.axisLeft(y));
-    };
+    }
 
-    var BarChart = function (data) {
+    function BarChart(data) {
         // set the dimensions and margins of the graph
         var axisOffset = 50;
         var svg = d3.select('svg')
@@ -127,16 +127,16 @@
             .append('g')
             .attr('class', 'axis')
             .call(d3.axisLeft(y));
-    };
+    }
 
     var parseTime = d3.timeParse('%m-%d');
     var parseTimeWithYear = d3.timeParse('%Y-%m-%d');
     d3.csv('data/counts-by-year.csv').then(function (rawData) {
-        var selectedYears = ['2013', '2018', '2020'];
+        var selectedYears = ['2018', '2020'];
         var selectedSmoothing = ['3-tage', '10-tage'];
         var selectedChartType = 'bar-chart';
         var selectedChartMode = 'comparison';
-        var updateGraph = function () {
+        function updateGraph() {
             // Create new copy every time so we don't mess with the original data set
             var currentCopy = rawData.map(function (d) { return ({
                 year: d.year,
@@ -164,33 +164,33 @@
                 LineGraph(filteredData);
             else if (selectedChartType === 'bar-chart')
                 BarChart(filteredData);
-        };
-        var onYearsChange = function (e) {
+        }
+        function onYearsChange(e) {
             var changedYear = e.target;
             if (changedYear.checked)
                 selectedYears.push(changedYear.value);
             else
                 selectedYears = selectedYears.filter(function (year) { return year !== changedYear.value; });
             updateGraph();
-        };
-        var onSmoothingChange = function (e) {
+        }
+        function onSmoothingChange(e) {
             var changedSmoothing = e.target;
             if (changedSmoothing.checked)
                 selectedSmoothing.push(changedSmoothing.value);
             else
                 selectedSmoothing = selectedSmoothing.filter(function (smoothing) { return smoothing !== changedSmoothing.value; });
             updateGraph();
-        };
-        var onChartTypeChange = function (e) {
+        }
+        function onChartTypeChange(e) {
             var clickedChartType = e.target;
             selectedChartType = clickedChartType.value;
             updateGraph();
-        };
-        var onChartModeChange = function (e) {
+        }
+        function onChartModeChange(e) {
             var clickedChartMode = e.target;
             selectedChartMode = clickedChartMode.value;
             updateGraph();
-        };
+        }
         document.querySelectorAll('#years .checkbox').forEach(function (checkbox) {
             var year = checkbox.children[1].value;
             checkbox.style.background = colors[year];
@@ -203,7 +203,7 @@
         document.querySelector('#chart-mode').addEventListener('change', onChartModeChange);
         updateGraph();
     });
-    var smooth = function (data, avgWidth) {
+    function smooth(data, avgWidth) {
         // smoothing with forward moving average
         data.forEach(function (d, i) {
             var localAvgWidth = avgWidth;
@@ -215,6 +215,6 @@
             var localAverage = d3.mean(localData.map(function (d) { return d.count; }));
             d.count = localAverage;
         });
-    };
+    }
 
 }(d3));
