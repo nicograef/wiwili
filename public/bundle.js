@@ -11,7 +11,7 @@
         2018: 'blue',
         2019: 'darkred',
         2020: 'brown',
-        2021: 'darkyellow'
+        2021: 'darkturquoise'
     };
 
     var LineGraph = function (data) {

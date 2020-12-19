@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "rollup -wc & serve public",
     "build": "npm run update && rollup -c",
+    "serve": "serve public",
     "deploy": "npm run build && gh-pages -d public",
     "update": "node utils/update-data.js"
   },

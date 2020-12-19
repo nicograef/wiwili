@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
+
 import { LineGraph } from './linegraph'
 import { BarChart } from './barchart'
-
 import { colors } from './constants'
 
 type countData = {
