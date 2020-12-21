@@ -1,4 +1,7 @@
 import typescriptPlugin from '@rollup/plugin-typescript'
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import json from '@rollup/plugin-json'
 
 export default {
   input: 'src/index.ts',
@@ -8,5 +11,5 @@ export default {
     globals: { d3: 'd3' }
   },
   external: ['d3'],
-  plugins: [typescriptPlugin()]
+  plugins: [resolve({ preferBuiltins: true, browser: true }), commonjs(), json(), typescriptPlugin()]
 }
