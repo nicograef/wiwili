@@ -23,7 +23,8 @@ export function LineGraph(data: countData[]) {
   const x = d3
     .scaleTime()
     .range([0, width])
-    .domain(d3.extent(data, d => d.date))
+    .domain(d3.extent(data.map(d => d.date)))
+  // [data[0].date, data[data.length - 1].date])
 
   const y = d3
     .scaleLinear()
@@ -37,25 +38,22 @@ export function LineGraph(data: countData[]) {
     .y(d => y(d.count))
   // .curve(d3.curveCatmullRom)
 
-  const countLines = d3
-    .nest<countData>()
-    .key(d => d.year)
-    .entries(data)
+  const countLines = d3.groups(data, d => d.year)
 
   const legendSpace = width / countLines.length // spacing for the legend
 
-  countLines.forEach((d, i) => {
+  countLines.forEach(([year, d], i) => {
     // compute mean and title
-    const counts = d.values.map((v: countData) => v.count)
-    const mean = Math.floor(d3.mean(counts) / 100) * 100
-    const title = d.key + ', ' + mean + '/Tag'
+    const counts = d.map((v) => v.count)
+    const mean = Math.floor(d3.mean(counts)! / 100) * 100
+    const title = year + ', ' + mean + '/Tag'
 
     // add the line
     svg
       .append('path')
       .attr('class', 'line')
-      .style('stroke', colors[d.key])
-      .attr('d', countLine(d.values))
+      .style('stroke', colors[year])
+      .attr('d', countLine(d))
 
     // add title
     svg
@@ -63,7 +61,7 @@ export function LineGraph(data: countData[]) {
       .attr('class', 'legend')
       .attr('x', legendSpace / 2 + i * legendSpace)
       .attr('y', 0)
-      .style('fill', colors[d.key])
+      .style('fill', colors[year])
       .text(title)
   })
 

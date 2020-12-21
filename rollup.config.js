@@ -8,8 +8,6 @@ export default {
   output: {
     file: 'public/bundle.js',
     format: 'iife',
-    globals: { d3: 'd3' }
   },
-  external: ['d3'],
   plugins: [resolve({ preferBuiltins: true, browser: true }), commonjs(), json(), typescriptPlugin()]
 }

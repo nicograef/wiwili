@@ -1,4 +1,8 @@
-export const colors = {
+interface IColors {
+  [year: string]: string
+}
+
+export const colors: IColors = {
   2012: 'orange',
   2013: 'red',
   2014: 'darkgreen',

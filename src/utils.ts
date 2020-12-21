@@ -23,12 +23,17 @@ function dateToQueryParamDate(date: Date): string {
     return date.toISOString().split('T')[0].replace(/-/g, '')
 }
 
+interface IFetchDataOptions {
+    /**
+     * Fetch data from the last n days
+     */
+    lastNDays?: number;
+}
+
 /**
  * Fetch bike data in JSON format
- * @param {number} lastDays Fetch data from the last n days
  */
-export async function fetchData(lastNDays: number = 1) {
-    console.log('fetching new data ...')
-    const dataUrl = getDataUrl(lastNDays)
+export async function fetchData(options: IFetchDataOptions) {
+    const dataUrl = getDataUrl(options.lastNDays || 1)
     return axios.get(dataUrl).then((res) => res.data)
 }
